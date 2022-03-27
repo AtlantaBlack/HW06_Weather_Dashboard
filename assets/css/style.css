@@ -3,3 +3,31 @@
 *::after {
   box-sizing: border-box;
 }
+
+
+
+.custom-row {
+    border: 1px dashed rgb(255, 141, 255);
+    background-color: rgb(253, 216, 253);
+    padding: 5px;
+}
+
+#search-input-container {
+    border: 1px solid red;
+    background-color: rgb(255, 228, 233);
+}
+
+#previous-searches-container {
+    border: 1px solid green;
+    background-color: rgb(203, 216, 203);
+}
+
+#weather-display-container {
+    border: 1px solid blue;
+    background-color: rgb(224, 224, 255);
+}
+
+#forecast-display-container{
+    border: 1px solid orange;
+    background-color: rgb(255, 237, 203);
+}
