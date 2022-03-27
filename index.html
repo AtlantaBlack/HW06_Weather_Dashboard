@@ -18,10 +18,10 @@
 
     <main>
         <div class="container-fluid">
-
             <div class="row custom-row">
-                <div id="search-input-container" class="col-4">
-                    <form>
+                <div class="content-left col-3">
+
+                    <form id="search-input-container">
                         <div class="mb-3">
                             <label for="city-name" class="form-label">
                                 City name:
@@ -32,33 +32,37 @@
                             <div id="cityHelp" class="form-text">Please input the name of a city.</div>
                         </div>
 
-                        <button type="submit" class="btn btn-primary">
+                        <button id="get-weather-button" type="submit" class="btn btn-primary">
                             Get Weather
                         </button>
                     </form>
+
+                    <div id="previous-searches-container">
+                        <div id="previous-searches">
+                            previous searches 
+                        </div>
+                    </div> 
                 </div>
-        
-                <div id="weather-display-container" class="col-8">
-                    <div id="weather-display">
-                        current weather display 
+
+                <div class="content-right col-9">
+                    <div id="weather-display-container">
+                        <div id="city-name-display">
+                        <!-- city name added here via javascript -->
+                        </div>
+
+                        <div id="weather-display">
+                            current weather display 
+                        </div>
+                    </div>
+
+                    <div id="forecast-display-container">
+                        <div id="forecast-display">
+                            forecast display
+                        </div>
                     </div>
                 </div>
-            </div>
 
-        <div class="row custom-row">
-            <div id="previous-searches-container" class="col-4">
-                <div id="previous-searches">
-                    previous searches 
-                </div>
             </div>
-
-            <div id="forecast-display-container" class="col-8">
-                <div id="forecast-display">
-                    forecast display
-                </div>
-            </div>
-        </div>
-
         </div>
     </main>
 

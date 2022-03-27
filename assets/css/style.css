@@ -5,6 +5,13 @@
 }
 
 
+.content-left {
+    float: left;
+}
+
+.content-right {
+    float: right;
+}
 
 .custom-row {
     border: 1px dashed rgb(255, 141, 255);
