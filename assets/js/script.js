@@ -27,7 +27,8 @@ function submitUserInput(event) {
 
 // convert city name to latitude and longitude values
 function geocodeTheCity(location) {
-    var geocodeUrl = "http://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=" + weatherAPIkey;
+    // http => https
+    var geocodeUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=" + weatherAPIkey;
 
     // console.log(geocodeUrl);
 
@@ -75,6 +76,7 @@ function displayCityName(localName, countryCode) {
 function getWeatherDetails(lat, lon) {
     // console.log("lat: " + lat + " lon: " + lon);
 
+    // originally https
     var queryUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly" + "&appid=" + weatherAPIkey + "&units=metric";
 
     // console.log(queryUrl);
@@ -92,7 +94,8 @@ function getWeatherDetails(lat, lon) {
 
             // extract icon data and make a url for it
             var iconCode = data.current.weather[0].icon;
-            var iconUrl = "http://openweathermap.org/img/wn/" + iconCode + "@2x.png";
+        // http => https
+            var iconUrl = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
 
             // console.log(iconUrl);
 
@@ -203,7 +206,8 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     // create element for uv index and append to display
     var columnFive = document.createElement("div");
     columnFive.classList = "col-6";
-    columnFive.innerHTML = "UV Index: " + "<span id='uvi-span'>" + colourChange(uv) + "</span>";
+    // columnFive.innerHTML = "UV Index: " + "<span id='uvi-span'>" + colourChange(uv) + "</span>";
+    columnFive.innerHTML = "UV Index: " + uv;
     rowThree.appendChild(columnFive);
 
     // create element for wind speed and append to display
@@ -215,16 +219,16 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     weatherDisplayArea.appendChild(rowThree);
 }
 
-function colourChange(uv) {
-    var uvispan = document.getElementById("uvi-span");
-    if (uv > 1) {
-        uvispan.style.backgroundColor = "red";
-        console.log(uv);
-    } else {
-        console.log(uv);
-    }
+// function colourChange(uv) {
+//     var uvispan = document.getElementById("uvi-span");
+//     if (uv > 1) {
+//         uvispan.style.backgroundColor = "red";
+//         console.log(uv);
+//     } else {
+//         console.log(uv);
+//     }
 
-}
+// }
 
 // display forecast for next five days
 function displayForecast(daily) {
