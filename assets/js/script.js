@@ -47,6 +47,8 @@ function geocodeTheCity(location) {
                 alert("Sorry, we couldn't find that city!\nPlease try again.");
                 return;    
             } else {
+                // console.log(data);
+
                 var lat = data[0].lat;
                 var lon = data[0].lon;
                 var cityName = data[0].name;
@@ -205,10 +207,20 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
 
     // create element for uv index and append to display
     var columnFive = document.createElement("div");
+    var spanUV = document.createElement("span");
+    
     columnFive.classList = "col-6";
-    // columnFive.innerHTML = "UV Index: " + "<span id='uvi-span'>" + colourChange(uv) + "</span>";
-    columnFive.innerHTML = "UV Index: " + uv;
+    columnFive.innerHTML = "UV Index:";
+    spanUV.innerHTML = " " + uv;
+        if (uv > 0.5) {
+            spanUV.style.backgroundColor = "red";
+        } else {
+            spanUV.style.backgroundColor = "cyan";
+        }
+    
+    columnFive.appendChild(spanUV);
     rowThree.appendChild(columnFive);
+
 
     // create element for wind speed and append to display
     var columnSix = document.createElement("div");
@@ -218,17 +230,6 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
 
     weatherDisplayArea.appendChild(rowThree);
 }
-
-// function colourChange(uv) {
-//     var uvispan = document.getElementById("uvi-span");
-//     if (uv > 1) {
-//         uvispan.style.backgroundColor = "red";
-//         console.log(uv);
-//     } else {
-//         console.log(uv);
-//     }
-
-// }
 
 // display forecast for next five days
 function displayForecast(daily) {
