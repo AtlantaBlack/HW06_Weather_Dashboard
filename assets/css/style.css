@@ -6,9 +6,11 @@
     --off-white: #f5f5f5;
 
     --solid-blue: #0077b6;
-
     --grey-blue: #4f5d75;
     --deep-blue: #193358;
+
+    --earthy: #aa9e93;
+    --ophelia: #c4bfba;
 }
 
 *,
@@ -21,15 +23,17 @@ body {
     background-color: var(--pale-sky);
     color: var(--deep-blue);
     font-family: 'League Spartan', sans-serif;
-    font-size: 24px;
+    font-size: 20px;
+
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: 600;
+    font-weight: bold;
 }
 
 h1 {
     font-size: 3rem;
+    letter-spacing: 0.2rem;
 }
 
 h2 {
@@ -52,6 +56,17 @@ h6 {
     font-size: 1.35rem;
 }
 
+header {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 10rem;
+    background: linear-gradient(var(--solid-blue), var(--sky));
+    color: var(--off-white);
+    text-transform: uppercase;
+    border-bottom: 2px solid var(--solid-blue);
+}
+
 .content-left {
     float: left;
 }
@@ -62,11 +77,11 @@ h6 {
 
 
 
-
 .custom-row {
     /* border: 1px dashed rgb(255, 141, 255);
     background-color: rgb(253, 216, 253); */
     padding: 5px;
+    margin: 5rem 0;
 }
 
 .custom-btn:hover {
@@ -76,6 +91,7 @@ h6 {
 
 form {
     background-color: var(--stone);
+    border-radius: 0.5rem;
     padding: 20px 10px;
 }
 
@@ -92,27 +108,40 @@ form {
 }
 
 #search-input-container {
-    border: 1px solid red;
+    /* border: 1px solid red; */
     /* background-color: rgb(255, 228, 233); */
+    margin-bottom: 0.5rem;
 }
 
 #previous-searches-container {
-    border: 1px solid green;
+    /* border: 1px solid green; */
     /* background-color: rgb(203, 216, 203); */
+    margin-top: 0.5rem;
 }
 
 #previous-searches {
-    background-color: orange;
+    background-color: var(--gravel);
+    border-radius: 0.5rem;
+    padding: 0.5rem 0;
 }
 
 #previous-searches button {
     min-width: 100%;
     margin: 5px 0;
+    border: 2px solid var(--ophelia);
+}
+
+#previous-searches button:hover {
+    background-color: var(--ophelia);
+    outline: 2px solid var(--off-white);
 }
 
 #weather-display-container {
-    border: 1px solid blue;
-    background-color: var(--off-white);
+    /* border: 1px solid blue; */
+    background-color: #fafafa;
+    border-radius: 0.5rem 0.5rem 0 0;
+    min-height: 12.5rem;
+    padding: 1rem;
 }
 
 #weather-display-container h3 {
@@ -120,6 +149,10 @@ form {
 }
 
 #forecast-display-container{
-    border: 1px solid orange;
+    /* border: 1px solid orange; */
     /* background-color: rgb(255, 237, 203); */
+    background-color: var(--sky);
+    border-radius: 0 0 0.5rem 0.5rem;
+    min-height: 12.5rem;
+    padding: 1rem;
 }

@@ -100,7 +100,6 @@ function saveAndDisplaySearch(cityInput) {
         let searchedCity = event.target.value;
         geocodeTheCity(searchedCity);
     })
-
 }
 
 // retrieving from local storage
