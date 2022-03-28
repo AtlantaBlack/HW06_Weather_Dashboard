@@ -1,9 +1,12 @@
 // authentication key for Open Weather API
 var weatherAPIkey = "70ae3d7cda7e676a90d911c1ff2798ed";
 
-var cityNameDisplayArea = document.querySelector("#city-name-display");
+var cityDisplayArea = document.querySelector("#city-name-display");
+var previousSearchesArea = document.querySelector("#previous-searches");
+
 var todaysDateArea = document.querySelector("#todays-date-display");
 var weatherDisplayArea = document.querySelector("#weather-display");
+var forecastDisplayArea = document.querySelector("#forecast-display");
 
 var submitButton = document.querySelector("#get-weather-button");
 
@@ -12,25 +15,24 @@ var submitButton = document.querySelector("#get-weather-button");
 function submitUserInput(event) {
     event.preventDefault();
 
-    var city = document.querySelector("#city-name");
-    city = city.value.trim();
-    // console.log(city);
+    var cityInput = document.querySelector("#city-name");
+    cityInput = cityInput.value.trim();
 
-    if (!city) {
-        alert("Please write a valid city name.");
+    if (!cityInput) {
+        alert("Please type in a valid city name.");
+        return;
     } else {
-        geocodeTheCity(city);
-        city.textContent = "";
-        city.value = "";
+        geocodeTheCity(cityInput);
+        cityInput.textContent = "";
+        cityInput.value = "";
     }
 }
+
 
 // convert city name to latitude and longitude values
 function geocodeTheCity(location) {
     // http => https
     var geocodeUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=" + weatherAPIkey;
-
-    // console.log(geocodeUrl);
 
     fetch(geocodeUrl)
         .then(function (response) {
@@ -41,20 +43,17 @@ function geocodeTheCity(location) {
             }
         })
         .then(function (data) {
-            // console.log(data);
-
             if (data.length === 0) {
                 alert("Sorry, we couldn't find that city!\nPlease try again.");
                 return;    
             } else {
-                // console.log(data);
-
                 var lat = data[0].lat;
                 var lon = data[0].lon;
                 var cityName = data[0].name;
                 var countryCode = data[0].country;
                 displayCityName(cityName, countryCode);
                 getWeatherDetails(lat, lon);
+                saveSearches(cityName);
             }
         })
         .catch(function (error) {
@@ -63,25 +62,43 @@ function geocodeTheCity(location) {
 }
 
 // display the city name and country
-function displayCityName(localName, countryCode) {
-    // console.log("city: " + localName + ", country: " + countryCode);
-
-    cityNameDisplayArea.textContent = "";
-
-    var title = document.createElement("h3");
-    title.append("Today's weather in " + localName + ", " + countryCode);
-
-    cityNameDisplayArea.appendChild(title);
+function displayCityName(cityName, countryCode) {
+    cityDisplayArea.textContent = "";
+    cityDisplayArea.textContent = cityName + ", " + countryCode;
 }
+
+// save the city name
+function saveSearches(cityname) {
+    let savedCity = cityname;
+    localStorage.setItem(savedCity, savedCity);
+    displaySearches(savedCity);
+}
+
+// display the city name by creating a button
+function displaySearches(savedcity) {
+    let searchedCity = document.createElement("button");
+    searchedCity.setAttribute("class", "search-history-button");
+    searchedCity.textContent = savedcity;
+    searchedCity.value = savedcity;
+
+    previousSearchesArea.appendChild(searchedCity);
+}
+
+// clicking on a button in the search history area searches again for the weather of the searched city
+previousSearchesArea.addEventListener("click", function (event) {
+    if (event.target.className === "search-history-button") {
+        event.stopPropagation;
+
+        searchedCity = event.target.value;
+        geocodeTheCity(searchedCity);
+    }
+});
+
 
 // grab weather data from the city at specified latitude/longitude
 function getWeatherDetails(lat, lon) {
-    // console.log("lat: " + lat + " lon: " + lon);
-
     // originally https
     var queryUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly" + "&appid=" + weatherAPIkey + "&units=metric";
-
-    // console.log(queryUrl);
 
     fetch(queryUrl)
         .then(function (response) {
@@ -92,39 +109,37 @@ function getWeatherDetails(lat, lon) {
             }
         })
         .then(function (data) {
-            // console.log(data);
-
             // extract icon data and make a url for it
             var iconCode = data.current.weather[0].icon;
-        // http => https
+            // http => https
             var iconUrl = "https://openweathermap.org/img/wn/" + iconCode + "@2x.png";
 
-            // console.log(iconUrl);
-
             // extract weather description data and run capitalise the first letter of first word
-            var description = data.current.weather[0].description;
-                function capitaliseFirstLetter(str) {
-                    let capitalised = str.charAt(0).toUpperCase() + str.slice(1);
-                    return capitalised;
-                }
+            var weatherDesc = data.current.weather[0].description;
 
-            var weatherDesc = capitaliseFirstLetter(description);
-            var temperature = data.current.temp;
-            var uvIndex = data.current.uvi;
+            var description = capitaliseFirstLetter(weatherDesc);
+            var temp = data.current.temp;
+            var uv = data.current.uvi;
             var humidity = data.current.humidity;
-            var windSpeed = data.current.wind_speed;
+            var wind = data.current.wind_speed;
 
             var currentTimestamp = data.current.dt;
             var daily = data.daily;
 
             convertTimestamp(currentTimestamp);
-            displayTheWeather(iconUrl, weatherDesc, temperature, uvIndex, humidity, windSpeed);
+            displayTheWeather(iconUrl, description, temp, uv, humidity, wind);
             displayForecast(daily);
             
         })
         .catch(function (error) {
             console.log(error);
         })
+}
+
+// capitalise the first letter of a string
+function capitaliseFirstLetter(str) {
+    let capitalised = str.charAt(0).toUpperCase() + str.slice(1);
+    return capitalised;
 }
 
 // to round a number to the nearest decimal point (or whole number)
@@ -134,27 +149,32 @@ function round(value, precision) {
 }
 
 // convert the unix timestamp into a readable date
-function convertTimestamp(stamp) {
-    // console.log("stamp " + stamp);
-    var currentDay = new Date(stamp * 1000);
-
-    // console.log("currentday " + currentDay);
+function convertTimestamp(timestamp) {
+    var currentDay = new Date(timestamp * 1000);
 
     var year = currentDay.getFullYear();
-    var month = ("0" + (currentDay.getMonth() + 1)).slice(-2);
+
+    // if you want the months to show numeric instead: 
+    // uncomment the following line. More instructions further down
+    // var month = ("0" + (currentDay.getMonth() + 1)).slice(-2);
+
     var day = ("0" + currentDay.getDate()).slice(-2);
 
-    // console.log("day " + day);
+    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
+    var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
+    var dayName = days[currentDay.getDay()];
+    var monthName = months[currentDay.getMonth()];
 
-    var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"];
-    var dayOfTheWeek = days[currentDay.getDay()];
+    // to show numeric months, uncomment the following line:
+    // date = dayName + " " + day + "/" + month + "/" + year;
+    // and comment out the following line:
+    date = dayName + " " + day + " " + monthName + " " + year;
 
-    date = dayOfTheWeek + " " + day + "-" + month + "-" + year;
-
-    displayTodaysDate(date);
+    return date;
 }
 
-function displayTodaysDate(date) {
+// display today's date in the current weather area
+function displayDate(date) {
     todaysDateArea.textContent = "";
 
     var titleDate = document.createElement("h5");
@@ -165,6 +185,8 @@ function displayTodaysDate(date) {
 // display the weather results
 function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     weatherDisplayArea.textContent = "";
+
+    displayDate(date);
 
     // create first row for icon and weather description display
     var rowOne = document.createElement("div");
@@ -188,16 +210,16 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     rowTwo.classList = "row";
 
     // create element for current temp and append to display
-    var columnThree = document.createElement("div");
-    columnThree.classList = "col-6";
-    columnThree.textContent = "Current temp: " + round(temp, 1) + " °C";
-    rowTwo.appendChild(columnThree);
+    var columnTwo = document.createElement("div");
+    columnTwo.classList = "col-6";
+    columnTwo.textContent = "Current temp: " + round(temp, 1) + " °C";
+    rowTwo.appendChild(columnTwo);
 
     // create element for humidity and append to display
-    var columnFour = document.createElement("div");
-    columnFour.classList = "col-6";
-    columnFour.textContent = "Humidity: " + humidity + "%";
-    rowTwo.appendChild(columnFour);
+    var columnThree = document.createElement("div");
+    columnThree.classList = "col-6";
+    columnThree.textContent = "Humidity: " + humidity + "%";
+    rowTwo.appendChild(columnThree);
 
     weatherDisplayArea.appendChild(rowTwo);
 
@@ -206,34 +228,102 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     rowThree.classList = "row";
 
     // create element for uv index and append to display
-    var columnFive = document.createElement("div");
+    var columnFour = document.createElement("div");
     var spanUV = document.createElement("span");
-    
-    columnFive.classList = "col-6";
-    columnFive.innerHTML = "UV Index:";
+
+    columnFour.classList = "col-6";
+    columnFour.innerHTML = "UV Index:";
     spanUV.innerHTML = " " + uv;
-        if (uv > 0.5) {
+        if (uv < 3) {
+            spanUV.style.backgroundColor = "greenyellow";
+        } else if (uv > 3 && uv < 6) {
+            spanUV.style.backgroundColor = "yellow";
+        } else if (uv > 6 && uv < 8) {
+            spanUV.style.backgroundColor = "orange";
+        }  else if (uv > 8 && uv < 11) {
             spanUV.style.backgroundColor = "red";
         } else {
-            spanUV.style.backgroundColor = "cyan";
+            spanUV.style.backgroundColor = "plum";
         }
     
-    columnFive.appendChild(spanUV);
-    rowThree.appendChild(columnFive);
-
+    columnFour.appendChild(spanUV);
+    rowThree.appendChild(columnFour);
 
     // create element for wind speed and append to display
-    var columnSix = document.createElement("div");
-    columnSix.classList = "col-6";
-    columnSix.textContent = "Wind speed: " + wind + " m/s";
-    rowThree.appendChild(columnSix);
+    var columnFive = document.createElement("div");
+    columnFive.classList = "col-6";
+    columnFive.textContent = "Wind speed: " + wind + " m/s";
+    rowThree.appendChild(columnFive);
 
     weatherDisplayArea.appendChild(rowThree);
 }
 
 // display forecast for next five days
 function displayForecast(daily) {
-    console.log(daily)
+    // console.log(daily)
+
+    forecastDisplayArea.textContent = "";
+
+    var cardRow = document.createElement("div");
+    cardRow.classList = "row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4";
+    forecastDisplayArea.appendChild(cardRow);
+
+    for (var i = 1; i < 6; i++) {
+        var cardContainer = document.createElement("div");
+        cardContainer.classList = "col";
+        cardRow.appendChild(cardContainer);
+
+        var forecastCard = document.createElement("div");
+        forecastCard.classList = "card h-100";
+        cardContainer.appendChild(forecastCard);
+
+        var cardBody = document.createElement("div");
+        cardBody.classList = "card-body";
+        forecastCard.appendChild(cardBody);
+
+        var futureDate = convertTimestamp(daily[i].dt);
+        // console.log(futureDate);
+        cardBody.textContent = futureDate;
+
+        // create a whole bunch of variables for each day's weather values
+        var futureIconCode = daily[i].weather[0].icon;
+        var futureIconUrl = "https://openweathermap.org/img/wn/" + futureIconCode + ".png";
+
+        var futureWeatherDesc = daily[i].weather[0].description;
+        var futureTemp = daily[i].temp.max;
+        var futureHumidity = daily[i].humidity;
+        var futureWind = daily[i].wind_speed;
+
+        // make an array for each day that shows
+        var futureDetails = [
+            capitaliseFirstLetter(futureWeatherDesc),
+            "Max Temp: " + round(futureTemp, 1) + " °C",
+            "Humidity: " + futureHumidity + "%",
+            "Wind: " + futureWind + " m/s"
+        ]
+
+        var futureIcon = document.createElement("img");
+        futureIcon.setAttribute("src", futureIconUrl);
+        futureIcon.setAttribute("id", "future-forecast-icon");
+        cardBody.appendChild(futureIcon);
+
+        var detailsList = document.createElement("ul");
+        detailsList.classList = "list-group list-group-flush";
+        detailsList.setAttribute("id", "future-details-list");
+
+        futureDetails.forEach(function(element) {
+            var listItem = document.createElement("li");
+            listItem.classList = "list-group-item";
+            listItem.textContent = element;
+            detailsList.appendChild(listItem);
+        })
+
+        cardBody.appendChild(detailsList);
+    }
+
 }
 
+
 submitButton.addEventListener("click", submitUserInput);
+
+// init();

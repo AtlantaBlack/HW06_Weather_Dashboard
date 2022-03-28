@@ -19,6 +19,15 @@
     padding: 5px;
 }
 
+#future-forecast-icon {
+    object-fit: none;
+    display: block;
+}
+
+#future-details-list {
+    list-style-type: none;
+}
+
 #search-input-container {
     border: 1px solid red;
     background-color: rgb(255, 228, 233);
