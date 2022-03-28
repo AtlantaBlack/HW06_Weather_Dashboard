@@ -23,6 +23,7 @@ function submitUserInput(event) {
         return;
     } else {
         geocodeTheCity(cityInput);
+        saveAndDisplaySearch(cityInput);
         cityInput.textContent = "";
         cityInput.value = "";
     }
@@ -53,7 +54,6 @@ function geocodeTheCity(location) {
                 var countryCode = data[0].country;
                 displayCityName(cityName, countryCode);
                 getWeatherDetails(lat, lon);
-                saveSearches(cityName);
             }
         })
         .catch(function (error) {
@@ -68,32 +68,29 @@ function displayCityName(cityName, countryCode) {
 }
 
 // save the city name
-function saveSearches(cityname) {
+function saveAndDisplaySearch(cityname) {
+    //save to local storage
     let savedCity = cityname;
     localStorage.setItem(savedCity, savedCity);
-    displaySearches(savedCity);
-}
 
-// display the city name by creating a button
-function displaySearches(savedcity) {
+    // add search to DOM
     let searchedCity = document.createElement("button");
     searchedCity.setAttribute("class", "search-history-button");
-    searchedCity.textContent = savedcity;
-    searchedCity.value = savedcity;
+    searchedCity.textContent = savedCity;
+    searchedCity.value = savedCity;
 
+    // make a button
     previousSearchesArea.appendChild(searchedCity);
+
+    previousSearchesArea.addEventListener("click", function(event) {
+        if (event.target.className === "search-history-button") {
+            event.stopPropagation;
+
+            searchedCity = event.target.value;
+            geocodeTheCity(searchedCity);
+        }
+    });
 }
-
-// clicking on a button in the search history area searches again for the weather of the searched city
-previousSearchesArea.addEventListener("click", function (event) {
-    if (event.target.className === "search-history-button") {
-        event.stopPropagation;
-
-        searchedCity = event.target.value;
-        geocodeTheCity(searchedCity);
-    }
-});
-
 
 // grab weather data from the city at specified latitude/longitude
 function getWeatherDetails(lat, lon) {
@@ -186,6 +183,7 @@ function displayDate(date) {
 function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     weatherDisplayArea.textContent = "";
 
+    // first display the current date
     displayDate(date);
 
     // create first row for icon and weather description display
@@ -256,12 +254,11 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     rowThree.appendChild(columnFive);
 
     weatherDisplayArea.appendChild(rowThree);
+ 
 }
 
 // display forecast for next five days
 function displayForecast(daily) {
-    // console.log(daily)
-
     forecastDisplayArea.textContent = "";
 
     var cardRow = document.createElement("div");
@@ -282,7 +279,6 @@ function displayForecast(daily) {
         forecastCard.appendChild(cardBody);
 
         var futureDate = convertTimestamp(daily[i].dt);
-        // console.log(futureDate);
         cardBody.textContent = futureDate;
 
         // create a whole bunch of variables for each day's weather values
