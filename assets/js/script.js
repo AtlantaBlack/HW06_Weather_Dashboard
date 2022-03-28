@@ -1,6 +1,8 @@
 // authentication key for Open Weather API
 var weatherAPIkey = "70ae3d7cda7e676a90d911c1ff2798ed";
 
+
+
 var cityDisplayArea = document.querySelector("#city-name-display");
 var previousSearchesArea = document.querySelector("#previous-searches");
 
@@ -15,7 +17,7 @@ var submitButton = document.querySelector("#get-weather-button");
 function submitUserInput(event) {
     event.preventDefault();
 
-    var cityInput = document.querySelector("#city-name");
+    var cityInput = document.getElementById("city-name");
     cityInput = cityInput.value.trim();
 
     if (!cityInput) {
@@ -67,29 +69,65 @@ function displayCityName(cityName, countryCode) {
     cityDisplayArea.textContent = cityName + ", " + countryCode;
 }
 
-// save the city name
-function saveAndDisplaySearch(cityname) {
-    //save to local storage
-    let savedCity = cityname;
-    localStorage.setItem(savedCity, savedCity);
+function saveAndDisplaySearch(cityInput) {
+    // set an object to be used for storing user input data
+    var savedCity = {
+        chosenCity: cityInput
+    }
 
-    // add search to DOM
-    let searchedCity = document.createElement("button");
-    searchedCity.setAttribute("class", "search-history-button");
-    searchedCity.textContent = savedCity;
-    searchedCity.value = savedCity;
+    // first retrieve results from local storage
+    let savedCities = JSON.parse(localStorage.getItem("searchHistory"));
+    // if no saved cities then start with an empty search array
+    if (savedCities === null) {
+        savedCities = [];
+    }
+    // add user input into the array for all saved searches
+    savedCities.push(savedCity);
+    // save to local storage
+    localStorage.setItem("searchHistory", JSON.stringify(savedCities));
 
-    // make a button
-    previousSearchesArea.appendChild(searchedCity);
+    // make some buttons for the user input
+    let searchedCityButton = document.createElement("button");
+    searchedCityButton.setAttribute("class", "search-history-button");
+    searchedCityButton.textContent = savedCity.chosenCity;
+    searchedCityButton.value = savedCity.chosenCity;
 
-    previousSearchesArea.addEventListener("click", function(event) {
-        if (event.target.className === "search-history-button") {
-            event.stopPropagation;
+    // add the button
+    previousSearchesArea.appendChild(searchedCityButton);
 
-            searchedCity = event.target.value;
+    // when the button is clicked, use the value of the clicked button (city name) to fetch the weather data
+    searchedCityButton.addEventListener("click", function(event) {
+        let searchedCity = event.target.value;
+        geocodeTheCity(searchedCity);
+    })
+
+}
+
+// retrieving from local storage
+function loadSearchHistory() {
+    // grab the data out of local storage
+    var data = JSON.parse(localStorage.getItem("searchHistory"));
+    console.log(data);
+    // if there's no data then end the function
+    if (!data) {
+        return;
+    }
+    // loop through the returned array and create buttons for each item in there
+    for (i = 0; i < data.length; i++) {
+        var dataButton = document.createElement("button");
+        dataButton.setAttribute("class", "search-history-buttons");
+        // text content and value will be the city the user chose
+        dataButton.textContent = data[i].chosenCity;
+        dataButton.value = data[i].chosenCity;
+        // add button to search history
+        previousSearchesArea.appendChild(dataButton);
+        // add event listener to button
+        dataButton.addEventListener("click", function(event) {
+            let searchedCity = event.target.value;
+            console.log(searchedCity);
             geocodeTheCity(searchedCity);
-        }
-    });
+        })
+    }
 }
 
 // grab weather data from the city at specified latitude/longitude
@@ -166,7 +204,6 @@ function convertTimestamp(timestamp) {
     // date = dayName + " " + day + "/" + month + "/" + year;
     // and comment out the following line:
     date = dayName + " " + day + " " + monthName + " " + year;
-
     return date;
 }
 
@@ -210,7 +247,7 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     // create element for current temp and append to display
     var columnTwo = document.createElement("div");
     columnTwo.classList = "col-6";
-    columnTwo.textContent = "Current temp: " + round(temp, 1) + " °C";
+    columnTwo.textContent = "Current temp: " + round(temp, 1) + "°C";
     rowTwo.appendChild(columnTwo);
 
     // create element for humidity and append to display
@@ -250,7 +287,7 @@ function displayTheWeather(icon, desc, temp, uv, humidity, wind) {
     // create element for wind speed and append to display
     var columnFive = document.createElement("div");
     columnFive.classList = "col-6";
-    columnFive.textContent = "Wind speed: " + wind + " m/s";
+    columnFive.textContent = "Wind speed: " + wind + "m/s";
     rowThree.appendChild(columnFive);
 
     weatherDisplayArea.appendChild(rowThree);
@@ -293,9 +330,9 @@ function displayForecast(daily) {
         // make an array for each day that shows
         var futureDetails = [
             capitaliseFirstLetter(futureWeatherDesc),
-            "Max Temp: " + round(futureTemp, 1) + " °C",
+            "Max Temp: " + round(futureTemp, 1) + "°C",
             "Humidity: " + futureHumidity + "%",
-            "Wind: " + futureWind + " m/s"
+            "Wind: " + futureWind + "m/s"
         ]
 
         var futureIcon = document.createElement("img");
@@ -319,7 +356,10 @@ function displayForecast(daily) {
 
 }
 
+function init() {
+    loadSearchHistory();
+}
 
 submitButton.addEventListener("click", submitUserInput);
 
-// init();
+init();

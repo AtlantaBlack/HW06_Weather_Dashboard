@@ -8,7 +8,7 @@
     --solid-blue: #0077b6;
 
     --grey-blue: #4f5d75;
-    --deep-blue: #031d44;
+    --deep-blue: #193358;
 }
 
 *,
@@ -19,7 +19,37 @@
 
 body {
     background-color: var(--pale-sky);
-    color: var(--grey-blue);
+    color: var(--deep-blue);
+    font-family: 'League Spartan', sans-serif;
+    font-size: 24px;
+}
+
+h1, h2, h3, h4, h5, h6 {
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 3rem;
+}
+
+h2 {
+    font-size: 2.6rem;
+}
+
+h3 {
+    font-size: 2.3rem;
+}
+
+h4 {
+    font-size: 2rem;
+}
+
+h5 {
+    font-size: 1.6rem;
+}
+
+h6 {
+    font-size: 1.35rem;
 }
 
 .content-left {
@@ -39,14 +69,17 @@ body {
     padding: 5px;
 }
 
+.custom-btn:hover {
+    background-color: var(--grey-blue);
+    border: 1px solid var(--grey-blue);
+}
+
 form {
-    background-color: var(--off-white);
+    background-color: var(--stone);
     padding: 20px 10px;
 }
 
-label {
 
-}
 
 
 #future-forecast-icon {
@@ -68,9 +101,22 @@ label {
     /* background-color: rgb(203, 216, 203); */
 }
 
+#previous-searches {
+    background-color: orange;
+}
+
+#previous-searches button {
+    min-width: 100%;
+    margin: 5px 0;
+}
+
 #weather-display-container {
     border: 1px solid blue;
-    /* background-color: rgb(224, 224, 255); */
+    background-color: var(--off-white);
+}
+
+#weather-display-container h3 {
+    color: var(--solid-blue);
 }
 
 #forecast-display-container{
