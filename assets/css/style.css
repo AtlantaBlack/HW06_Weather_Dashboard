@@ -19,12 +19,14 @@
   box-sizing: border-box;
 }
 
+html {
+    font-size: 18px;
+}
+
 body {
     background-color: var(--pale-sky);
     color: var(--deep-blue);
     font-family: 'League Spartan', sans-serif;
-    font-size: 20px;
-
 }
 
 h1, h2, h3, h4, h5, h6 {
@@ -32,28 +34,28 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 h1 {
-    font-size: 3rem;
-    letter-spacing: 0.2rem;
+    font-size: 2.8em;
+    /* letter-spacing: 0.2rem; */
 }
 
 h2 {
-    font-size: 2.6rem;
+    font-size: 2.4rem;
 }
 
 h3 {
-    font-size: 2.3rem;
+    font-size: 2.2rem;
 }
 
 h4 {
-    font-size: 2rem;
+    font-size: 1.95rem;
 }
 
 h5 {
-    font-size: 1.6rem;
+    font-size: 1.5rem;
 }
 
 h6 {
-    font-size: 1.35rem;
+    font-size: 1.15rem;
 }
 
 header {
@@ -98,7 +100,7 @@ form {
 
 
 
-#future-forecast-icon {
+img {
     object-fit: none;
     display: block;
 }
@@ -148,11 +150,23 @@ form {
     color: var(--solid-blue);
 }
 
-#forecast-display-container{
+#uvi-span {
+    padding: 0.2rem 1rem;
+}
+
+#forecast-display-container {
     /* border: 1px solid orange; */
     /* background-color: rgb(255, 237, 203); */
     background-color: var(--sky);
     border-radius: 0 0 0.5rem 0.5rem;
     min-height: 12.5rem;
     padding: 1rem;
+}
+
+.border-orange {
+    border: 1px solid orange;
+}
+
+.border-blue {
+    border: 1px solid blue;
 }
