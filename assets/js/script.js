@@ -345,37 +345,39 @@ function displayForecast(daily) {
 
     // first make sure index of data from 'daily' is 1-5 (tomorrow = [1], day after = [2], day after that = [3], etc)
     for (var i = 1; i < 6; i++) {
-        // for each [i], make a container div
+        // for each [i], make a container div to hold cards
         var fdContainer = document.createElement("div");
         fdContainer.classList = "col";
         fdRow.appendChild(fdContainer);
 
-        // make a card div
+        // make a card div to hold content
         var forecastCard = document.createElement("div");
         forecastCard.classList = "card h-100";
         fdContainer.appendChild(forecastCard);
 
-        // make a card body div
+        // make a card body div to add in the content
         var cardBody = document.createElement("div");
         cardBody.classList = "card-body";
         forecastCard.appendChild(cardBody);
 
+        // make the title for each card be the subsequent dates
         var futureDate = displayDate(daily[i].dt);
         var futureDateTitle = document.createElement("h6");
         futureDateTitle.textContent = futureDate;
         cardBody.append(futureDateTitle);
 
-        // create a whole bunch of variables for each day's weather values
+        // make icon url for the future forecasts
         var futureIconCode = daily[i].weather[0].icon;
         var futureIconUrl = "https://openweathermap.org/img/wn/" + futureIconCode + ".png";
 
+        // create variables with readable names according to each day's weather values
         var futureWeatherDesc = daily[i].weather[0].description;
         var futureMinTemp = daily[i].temp.min;
         var futureMaxTemp = daily[i].temp.max;
         var futureHumidity = daily[i].humidity;
         var futureWind = daily[i].wind_speed;
 
-        // make an array for each day that shows
+        // make an array for each day using the above variables
         var futureDetails = [
             capitaliseFirstLetter(futureWeatherDesc),
             "Min Temp: " + round(futureMinTemp) + "°C",
@@ -384,6 +386,7 @@ function displayForecast(daily) {
             "Wind: " + futureWind + "m/s"
         ]
 
+        // add the icon to the card
         var futureIcon = document.createElement("img");
         futureIcon.setAttribute("src", futureIconUrl);
         futureIcon.setAttribute("id", "future-forecast-icon");
@@ -391,17 +394,19 @@ function displayForecast(daily) {
 
         // 'f' prefix means 'future (weather)'
 
+        // make a list to add in the weather conditions
         var fDetailsList = document.createElement("ul");
         fDetailsList.classList = "list-group list-group-flush";
         fDetailsList.setAttribute("id", "future-details-list");
 
+        // create a list item for each of the future details array and append to the ul
         futureDetails.forEach(function(element) {
             var listItem = document.createElement("li");
             listItem.classList = "list-group-item";
             listItem.textContent = element;
             fDetailsList.appendChild(listItem);
         })
-
+        // append ul to the card
         cardBody.appendChild(fDetailsList);
     }
 
