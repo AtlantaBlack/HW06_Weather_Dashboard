@@ -25,39 +25,38 @@
     </header>
 
     <main>
-        <div class="container-fluid">
+        <div class="container-fluid main-child">
             <div class="row custom-row">
                 <div class="col-12 col-md-3 mb-3 content-left">
 
-                    <form id="search-input-container">
+                    <form id="search-input-container" class="shadow">
                         <div class="mb-3">
                             <label for="city-name" class="form-label">
                                 Search for a City:
                             </label>
 
-                            <input type="text" class="form-control" id="city-name" aria-describedby="cityHelp">
+                            <input id="city-name" class="form-control" type="search" placeholder="Sydney" aria-describedby="cityHelp">
 
-                            <div id="cityHelp" class="form-text">Please input the name of a city.</div>
+                            <div id="cityHelp" class="form-text">Please type in the name of a city.</div>
                         </div>
 
-                        <button id="get-weather-button" type="submit" class="btn btn-primary custom-btn">
+                        <button id="get-weather-button" type="submit" class="btn btn-primary custom-btn custom-form-btn">
                             Get Weather
                         </button>
                     </form>
 
-                    <div id="previous-searches-container">
+                    <div id="previous-searches-container" class="shadow">
                         <h6>Search History</h6>
+                        <button id="clear-history-button" class="btn btn-secondary custom-btn">Clear History</button>
 
-                      
                         <div id="previous-searches" class="container-fluid g-0 flex-column-reverse">
                         <!-- previous searches  -->
-                    
-                        </div>  
+                        </div>
                     </div> 
                 </div>
 
                 <div class="col-12 col-md-9 content-right">
-                    <div id="weather-display-container">
+                    <div id="weather-display-container" class="shadow">
                         <h3>Today's weather forecast in <span id="city-name-display">...</span>
                         </h3>
 
@@ -66,7 +65,7 @@
                         </div>
                     </div>
 
-                    <div id="forecast-display-container">
+                    <div id="forecast-display-container" class="shadow">
                         <h4>5 Day Forecast</h4>
 
                         <div id="forecast-display">

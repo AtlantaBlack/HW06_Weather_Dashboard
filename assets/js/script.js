@@ -1,8 +1,6 @@
 // authentication key for Open Weather API
 var weatherAPIkey = "70ae3d7cda7e676a90d911c1ff2798ed";
 
-
-
 var cityDisplayArea = document.querySelector("#city-name-display");
 var previousSearchesArea = document.querySelector("#previous-searches");
 
@@ -11,6 +9,7 @@ var weatherDisplayArea = document.querySelector("#weather-display");
 var forecastDisplayArea = document.querySelector("#forecast-display");
 
 var submitButton = document.querySelector("#get-weather-button");
+var clearButton = document.querySelector("#clear-history-button");
 
 
 // submit user input: convert city name to long & lat for weather API
@@ -64,8 +63,12 @@ function geocodeTheCity(location) {
 
 // display the city name and country
 function displayCityName(cityName, countryCode) {
+    // clear the display area
     cityDisplayArea.textContent = "";
-    cityDisplayArea.textContent = cityName + ", " + countryCode;
+    // do some magic to turn country code into full country name
+    let countryName = new Intl.DisplayNames(["en"], { type: "region" });
+    // display the city name paired with the country name
+    cityDisplayArea.textContent = cityName + ", " + countryName.of(countryCode);
 }
 
 function saveAndDisplaySearch(cityInput) {
@@ -108,7 +111,6 @@ function saveAndDisplaySearch(cityInput) {
 function loadSearchHistory() {
     // grab the data out of local storage
     var data = JSON.parse(localStorage.getItem("searchHistory"));
-    console.log(data);
     // if there's no data then end the function
     if (!data) {
         return;
@@ -129,6 +131,13 @@ function loadSearchHistory() {
         })
     }
 }
+
+
+function clearSearchHistory() {
+    localStorage.clear();
+    previousSearchesArea.textContent = "";
+}
+
 
 // grab weather data from the city at specified latitude/longitude
 function getWeatherDetails(lat, lon) {
@@ -299,13 +308,15 @@ function displayTheWeather(weatherconditions) {
         if (uvi < 3) {
             spanUV.style.backgroundColor = "greenyellow";
         } else if (uvi > 3 && uvi < 6) {
-            spanUV.style.backgroundColor = "yellow";
+            spanUV.style.backgroundColor = "gold";
         } else if (uvi > 6 && uvi < 8) {
             spanUV.style.backgroundColor = "orange";
         }  else if (uvi > 8 && uvi < 11) {
             spanUV.style.backgroundColor = "red";
+            spanUV.style.color = "white";
         } else {
-            spanUV.style.backgroundColor = "plum";
+            spanUV.style.backgroundColor = "purple";
+            spanUV.style.color = "white";
         }
     // add the span to the li and then append the whole thing to ul
     currentUVIndex.appendChild(spanUV);
@@ -357,7 +368,8 @@ function displayForecast(daily) {
 
         // make a card body div to add in the content
         var cardBody = document.createElement("div");
-        cardBody.classList = "card-body";
+        // add flex to card body to align items vertically and in the centre
+        cardBody.classList = "card-body d-flex flex-column align-items-center";
         forecastCard.appendChild(cardBody);
 
         // make the title for each card be the subsequent dates
@@ -389,6 +401,7 @@ function displayForecast(daily) {
         // add the icon to the card
         var futureIcon = document.createElement("img");
         futureIcon.setAttribute("src", futureIconUrl);
+        futureIcon.setAttribute("alt", daily[i].weather[0].main);
         futureIcon.setAttribute("id", "future-forecast-icon");
         cardBody.appendChild(futureIcon);
 
@@ -417,5 +430,6 @@ function init() {
 }
 
 submitButton.addEventListener("click", submitUserInput);
+clearButton.addEventListener("click", clearSearchHistory);
 
 init();

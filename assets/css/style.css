@@ -1,16 +1,16 @@
 :root {
-    --stone: #f0ebe7;
-    --gravel: #dbd4ce;
-    --sky: #b6cbde;
-    --pale-sky: #d4e5ef;
-    --off-white: #f5f5f5;
+    --stone: rgb(240, 235, 231);
+    --gravel: rgb(219, 212, 206);
+    --sky: rgb(182, 203, 222);
+    --pale-sky: rgb(212, 229, 239);
+    --off-white: rgb(245, 245, 245);
 
-    --solid-blue: #0077b6;
-    --grey-blue: #4f5d75;
-    --deep-blue: #193358;
+    --solid-blue: rgb(0, 119, 182);
+    --grey-blue: rgb(79, 93, 117);
+    --deep-blue: rgb(25, 51, 88);
 
-    --earthy: #aa9e93;
-    --ophelia: #c4bfba;
+    --earthy: rgb(170, 158, 147);
+    --ophelia: rgb(196, 191, 186);
 }
 
 *,
@@ -24,7 +24,8 @@ html {
 }
 
 body {
-    background-color: var(--pale-sky);
+    background: var(--pale-sky) url("../images/blue-sky-taylor-van-riper.jpg") no-repeat fixed bottom;
+    background-size: cover;
     color: var(--deep-blue);
     font-family: 'League Spartan', sans-serif;
 }
@@ -35,7 +36,7 @@ h1, h2, h3, h4, h5, h6 {
 
 h1 {
     font-size: 2.8em;
-    /* letter-spacing: 0.2rem; */
+    letter-spacing: 0.1rem;
 }
 
 h2 {
@@ -58,7 +59,7 @@ h6 {
     font-size: 1.15rem;
 }
 
-header {
+header h1 {
     display: flex;
     justify-content: center;
     align-items: center;
@@ -69,6 +70,19 @@ header {
     border-bottom: 2px solid var(--solid-blue);
 }
 
+
+form {
+    background-color: var(--stone);
+    border-radius: 0.5rem;
+    padding: 20px 10px;
+}
+
+img {
+    object-fit: none;
+    display: block;
+}
+
+
 .content-left {
     float: left;
 }
@@ -77,11 +91,7 @@ header {
     float: right;
 }
 
-
-
 .custom-row {
-    /* border: 1px dashed rgb(255, 141, 255);
-    background-color: rgb(253, 216, 253); */
     padding: 5px;
     margin: 5rem 0;
 }
@@ -91,39 +101,36 @@ header {
     border: 1px solid var(--grey-blue);
 }
 
-form {
-    background-color: var(--stone);
-    border-radius: 0.5rem;
-    padding: 20px 10px;
+.custom-form-btn {
+    background-color: var(--solid-blue);
+    border: 1px solid var(--solid-blue);
+    height: 2.2rem;
 }
 
-
-
-
-img {
-    object-fit: none;
-    display: block;
-}
 
 #future-details-list {
     list-style-type: none;
 }
 
 #search-input-container {
-    /* border: 1px solid red; */
-    /* background-color: rgb(255, 228, 233); */
     margin-bottom: 0.5rem;
 }
 
 #previous-searches-container {
-    /* border: 1px solid green; */
-    /* background-color: rgb(203, 216, 203); */
-    margin-top: 0.5rem;
+    background-color: var(--off-white);
+    border-radius: 0.5rem;
+    padding: 1rem 0.2rem;
+}
+
+#clear-history-button {
+    height: 2.2rem;
+    width: 100%;
 }
 
 #previous-searches {
     background-color: var(--gravel);
-    border-radius: 0.5rem;
+    border-radius: 0.25rem;
+    margin-top: 1rem;
     padding: 0.5rem 0;
 }
 
@@ -139,7 +146,6 @@ img {
 }
 
 #weather-display-container {
-    /* border: 1px solid blue; */
     background-color: #fafafa;
     border-radius: 0.5rem 0.5rem 0 0;
     min-height: 12.5rem;
@@ -151,12 +157,11 @@ img {
 }
 
 #uvi-span {
-    padding: 0.2rem 1rem;
+    padding: 0.25rem 0.9rem 0.1rem;
+    border-radius: 0.5rem;
 }
 
 #forecast-display-container {
-    /* border: 1px solid orange; */
-    /* background-color: rgb(255, 237, 203); */
     background-color: var(--sky);
     border-radius: 0 0 0.5rem 0.5rem;
     min-height: 12.5rem;
