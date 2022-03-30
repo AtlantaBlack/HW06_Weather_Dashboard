@@ -9,25 +9,24 @@
     <!-- google fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300&family=Montserrat:wght@200&family=Playfair+Display:ital,wght@1,500;1,600&display=swap" rel="stylesheet">
-    <!-- google fonts -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300&family=Montserrat:wght@200&family=Playfair+Display:ital,wght@1,500;1,600&family=Roboto:wght@300&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=League+Spartan:wght@300&display=swap" rel="stylesheet">
     <!-- custom css -->
     <link rel="stylesheet" href="./assets/css/style.css" />
     <title>Weather Dashboard</title>
 </head>
 
+<!-- have the default background image be clear skies -->
 <body class="clear-sky">
     <header>
         <h1>Weather Dashboard</h1>
     </header>
 
     <main>
+        <!-- next two divs make the whole dashboard centered horizontally and vertically on the page (when at 768px wide or higher) -->
         <div class="container-fluid g-0 main-parent-flex">
             <div class="row custom-row main-child-flex">
 
+                <!-- left column for search form and history -->
                 <div class="col-12 col-md-3 mb-3 content-left">
                     <form id="search-input-container" class="shadow">
                         <div class="mb-3">
@@ -46,7 +45,7 @@
                     </form>
 
                     <section id="previous-searches-container" class="shadow">
-                        <h6>Search History</h6>
+                        <h5>Search History</h5>
                         <button id="clear-history-button" class="btn btn-secondary custom-btn">Clear History</button>
 
                         <div id="previous-searches" class="container-fluid g-0 flex-column-reverse">
@@ -55,18 +54,21 @@
                     </section> 
                 </div>
 
+                <!-- right column for all the weather details -->
                 <div class="col-12 col-md-9 content-right">
+                    <!-- section to display current forecast -->
                     <section id="weather-display-container" class="shadow">
-                        <h3>Today's weather forecast in <span id="city-name-display">...</span>
-                        </h3>
+                        <h2>Today's weather forecast in <span id="city-name-display">...</span>
+                        </h2>
 
                         <div id="weather-display">
                         <!-- current weather display  -->
                         </div>
                     </section>
 
+                    <!-- section to display 5 day forecast -->
                     <section id="forecast-display-container" class="shadow">
-                        <h4>5 Day Forecast</h4>
+                        <h3>5 Day Forecast</h3>
 
                         <div id="forecast-display">
                         <!-- forecast display -->

@@ -26,40 +26,46 @@ html {
 body {
     background-color: var(--pale-sky);
     color: var(--deep-blue);
-    font-family: 'League Spartan', sans-serif;
+    font-family: 'League Spartan', Arial, sans-serif;
     font-weight: 300;
 }
 
+/* holds bg image for clear skies */
 .clear-sky {
     background: var(--pale-sky) url("../images/blue-sky-taylor-van-riper.jpg") no-repeat fixed bottom;
     background-size: cover;
 }
-
+/* holds bg image for cloudy skies */
 .overcast {
     background: var(--pale-sky) url("../images/cloudy-nikhil-dafare.jpg") no-repeat fixed center;
     background-size: cover;
 }
 
+/* holds bg image for lightning */
 .thunderstorm {
     background: var(--grey-blue) url("../images/lightning-glenn-abelson.jpg") no-repeat fixed top;
     background-size: cover;
 }
 
+/* holds bg image for light rain */
 .drizzle {
     background: var(--grey-blue) url("../images/drizzle-jose-fontano.jpg") no-repeat fixed center;
     background-size: cover;
 }
 
+/* holds bg image for rain */
 .rain {
     background: var(--grey-blue) url("../images/rain-alex-dukhanov.jpg") no-repeat fixed center;
     background-size: cover;
 }
 
+/* holds bg image for snow */
 .snow {
     background: var(--sky) url("../images/snow-thomas-griesbeck.jpg") no-repeat fixed center;
     background-size: cover;
 }
 
+/* holds bg image for haze/smoke */
 .atmosphere {
     background: var(--sky) url("../images/smoke-daniel-gregoire.jpg") no-repeat fixed center;
     background-size: cover;
@@ -75,33 +81,29 @@ h1 {
 }
 
 h2 {
-    font-size: 2.4rem;
-}
-
-h3 {
     font-size: 2.2rem;
 }
 
-h4 {
+h3 {
     font-size: 1.95rem;
 }
 
-h5 {
+h4 {
     font-size: 1.5rem;
 }
 
-h6 {
+h5 {
     font-size: 1.15rem;
 }
 
+/* hide header from view but screen readers can still read it */
 header {
-    visibility: hidden;
+    text-indent: -10000px !important;
 }
 
 .main-child-flex {
     background-color: rgba(250, 250, 250, 0.2);
 }
-
 
 form {
     background-color: var(--stone);
@@ -109,11 +111,11 @@ form {
     padding: 20px 10px;
 }
 
+/* make all images display on their own line */
 img {
     object-fit: none;
     display: block;
 }
-
 
 .content-left {
     float: left;
@@ -123,6 +125,7 @@ img {
     float: right;
 }
 
+/* add some custom padding and margins to bootstrap row */
 .custom-row {
     padding: 1rem;
     margin: 2.2rem 0 5rem;
@@ -140,10 +143,6 @@ img {
     height: 2.2rem;
 }
 
-
-#future-details-list {
-    list-style-type: none;
-}
 
 #search-input-container {
     margin-bottom: 0.5rem;
@@ -178,14 +177,18 @@ img {
     outline: 2px solid var(--off-white);
 }
 
-#weather-display-container {
-    background-color: rgba(250, 250, 250, 0.95);
-    border-radius: 0.5rem 0.5rem 0 0;
+#weather-display-container, 
+#forecast-display-container {
     min-height: 12.5rem;
     padding: 1rem;
 }
 
-#weather-display-container h3 {
+#weather-display-container {
+    background-color: rgba(250, 250, 250, 0.95);
+    border-radius: 0.5rem 0.5rem 0 0;
+}
+
+#weather-display-container h2 {
     color: var(--solid-blue);
 }
 
@@ -197,19 +200,12 @@ img {
 #forecast-display-container {
     background-color: rgba(182, 203, 222, 0.92);
     border-radius: 0 0 0.5rem 0.5rem;
-    min-height: 12.5rem;
-    padding: 1rem;
 }
 
-.border-orange {
-    border: 1px solid orange;
-}
 
-.border-blue {
-    border: 1px solid blue;
-}
-
+/* when screen gets ipad-sized and higher */
 @media screen and (min-width: 768px) {
+    /* add flexbox properties to vertically and horizontally align the content */
     .main-parent-flex {
         width: 100%;
         min-height: 100vh;

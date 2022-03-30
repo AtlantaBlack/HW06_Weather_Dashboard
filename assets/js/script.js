@@ -1,15 +1,12 @@
 // authentication key for Open Weather API
 var weatherAPIkey = "70ae3d7cda7e676a90d911c1ff2798ed";
 
+// grab necessary variables out of DOM 
 var body = document.querySelector("body");
 
-var cityDisplayArea = document.querySelector("#city-name-display");
 var previousSearchesArea = document.querySelector("#previous-searches");
 
-// var mainParentFlex = document.querySelector(".main-parent-flex");
-// var mainChildFlex = document.querySelector(".main-child-flex");
-
-var todaysDateArea = document.querySelector("#todays-date-display");
+var cityNameArea = document.querySelector("#city-name-display");
 var weatherDisplayArea = document.querySelector("#weather-display");
 var forecastDisplayArea = document.querySelector("#forecast-display");
 
@@ -19,8 +16,10 @@ var clearButton = document.querySelector("#clear-history-button");
 
 // submit user input: convert city name to long & lat for weather API
 function submitUserInput(event) {
+    // prevent button default actions
     event.preventDefault();
 
+    // cityInput will be whatever the user types into the search
     var cityInput = document.getElementById("city-name");
     cityInput = cityInput.value.trim();
 
@@ -35,11 +34,65 @@ function submitUserInput(event) {
     }
 }
 
+// UTILITY FUNCTIONS (for making things look nice)
+
+// capitalise the first letter of a string
+function capitaliseFirstLetter(str) {
+    let capitalised = str.charAt(0).toUpperCase() + str.slice(1);
+    return capitalised;
+}
+
+// to round a number to decimal points or to whole number (precision value will be the amount of numbers after decimal point)
+function round(value, precision) {
+    var multiplier = Math.pow(10, precision || 0);
+    return Math.round(value * multiplier) / multiplier;
+}
+
+// to swap out the background image depending on the current weather conditions
+function changeWeatherBackground(weatherID) {
+    // clear <body> of its classes first or classes will double up
+    body.setAttribute("class", "");
+
+    // depending on the weather ID number, add the relevant class (which contains the bg image) to the body, and add a data attribute for good measure
+    if (weatherID >= 200 && weatherID < 300) {
+        body.setAttribute("data-condition", "thunderstorm");
+        body.classList.add("thunderstorm");
+
+    } else if (weatherID >= 300 && weatherID < 400) {
+        body.setAttribute("data-condition", "drizzle");
+        body.classList.add("drizzle");
+
+    } else if (weatherID >= 500 && weatherID < 600) {
+        body.setAttribute("data-condition", "rain");
+        body.classList.add("rain");
+
+    } else if (weatherID >= 600 && weatherID < 700) {
+        body.setAttribute("data-condition", "snow");
+        body.classList.add("snow");
+
+    } else if (weatherID >= 700 && weatherID < 800) {
+        body.setAttribute("data-condition", "hazy");
+        body.classList.add("atmosphere");
+
+    }  else if (weatherID > 800) {
+        body.setAttribute("data-condition", "overcast");
+        body.classList.add("overcast");
+
+    // the default bg is 'clear sky'
+    } else {
+        body.setAttribute("data-condition", "clear");
+        body.classList.add("clear-sky");
+    }
+}
+
+// DATA RETRIEVAL FUNCTIONS (fetch)
+
 // convert city name to latitude and longitude values
 function geocodeTheCity(location) {
-    // http => https
+    // originally api url was 'http'; must be changed to 'https' for live deployment to work properly
     var geocodeUrl = "https://api.openweathermap.org/geo/1.0/direct?q=" + location + "&appid=" + weatherAPIkey;
 
+    // grab the data
     fetch(geocodeUrl)
         .then(function (response) {
             if (!response.ok) {
@@ -49,14 +102,18 @@ function geocodeTheCity(location) {
             }
         })
         .then(function (data) {
+            // if there's no data then display an error message
             if (data.length === 0) {
                 alert("Sorry, we couldn't find that city!\nPlease try again.");
                 return;    
             } else {
+                // grab latitude and longitude values
                 var lat = data[0].lat;
                 var lon = data[0].lon;
+                // grab city name and country code values
                 var cityName = data[0].name;
                 var countryCode = data[0].country;
+                // pass values on to relevant functions
                 displayCityName(cityName, countryCode);
                 getWeatherDetails(lat, lon);
             }
@@ -66,87 +123,9 @@ function geocodeTheCity(location) {
         });
 }
 
-// display the city name and country
-function displayCityName(cityName, countryCode) {
-    // clear the display area
-    cityDisplayArea.textContent = "";
-    // do some magic to turn country code into full country name
-    let countryName = new Intl.DisplayNames(["en"], { type: "region" });
-    // display the city name paired with the country name
-    cityDisplayArea.textContent = cityName + ", " + countryName.of(countryCode);
-}
-
-function saveAndDisplaySearch(cityInput) {
-    // set an object to be used for storing user input data
-    var savedCity = {
-        chosenCity: cityInput
-    }
-
-    // first retrieve results from local storage
-    let savedCities = JSON.parse(localStorage.getItem("searchHistory"));
-    // if no saved cities then start with an empty search array
-    if (savedCities === null) {
-        savedCities = [];
-    }
-    // add user input into the array for all saved searches
-    savedCities.push(savedCity);
-    // save to local storage
-    localStorage.setItem("searchHistory", JSON.stringify(savedCities));
-
-    // make some buttons for each user input
-    let searchedCityButton = document.createElement("button");
-    searchedCityButton.setAttribute("class", "search-history-button");
-    searchedCityButton.textContent = savedCity.chosenCity;
-    // make sure button value is the user input
-    searchedCityButton.value = savedCity.chosenCity;
-
-    // add the button
-    previousSearchesArea.appendChild(searchedCityButton);
-
-    // when the button is clicked, use the value of the clicked button (city name) to fetch the weather data
-    searchedCityButton.addEventListener("click", function(event) {
-        // transfer the button value (ie user input) to a variable
-        let searchedCity = event.target.value;
-        // pass that variable on to fetch and print city data
-        geocodeTheCity(searchedCity);
-    })
-}
-
-// retrieving from local storage
-function loadSearchHistory() {
-    // grab the data out of local storage
-    var data = JSON.parse(localStorage.getItem("searchHistory"));
-    // if there's no data then end the function
-    if (!data) {
-        return;
-    }
-    // loop through the returned array and create buttons for each item in there
-    for (i = 0; i < data.length; i++) {
-        var dataButton = document.createElement("button");
-        dataButton.setAttribute("class", "search-history-buttons");
-        // text content and value will be the city the user chose
-        dataButton.textContent = data[i].chosenCity;
-        dataButton.value = data[i].chosenCity;
-        // add button to search history
-        previousSearchesArea.appendChild(dataButton);
-        // add event listener to button
-        dataButton.addEventListener("click", function(event) {
-            let searchedCity = event.target.value;
-            geocodeTheCity(searchedCity);
-        })
-    }
-}
-
-
-function clearSearchHistory() {
-    localStorage.clear();
-    previousSearchesArea.textContent = "";
-}
-
-
 // grab weather data from the city at specified latitude/longitude
 function getWeatherDetails(lat, lon) {
-    // api url originally https
+    // api url originally 'https'; no need to change
 
     // using latitude and longitude values, construct a query url
     var queryUrl = "https://api.openweathermap.org/data/2.5/onecall?lat=" + lat + "&lon=" + lon + "&exclude=minutely,hourly" + "&appid=" + weatherAPIkey + "&units=metric";
@@ -184,28 +163,27 @@ function getWeatherDetails(lat, lon) {
                 "today": data.current.dt,
                 "daily": data.daily
             }
-
-            // pass object containing weather details on
+            // pass object containing all weather details on
             displayTheWeather(weatherConditions);
             // pass only the daily forecast info on
             displayForecast(weatherConditions.daily);
-
         })
         .catch(function (error) {
             console.log(error);
         })
 }
 
-// capitalise the first letter of a string
-function capitaliseFirstLetter(str) {
-    let capitalised = str.charAt(0).toUpperCase() + str.slice(1);
-    return capitalised;
-}
+// PRINTING FUNCTIONS (for displaying everything)
 
-// to round a number to decimal points or to whole number (precision value will be the amount of numbers after decimal point)
-function round(value, precision) {
-    var multiplier = Math.pow(10, precision || 0);
-    return Math.round(value * multiplier) / multiplier;
+// display the city name and country
+function displayCityName(cityName, countryCode) {
+    // clear the display area
+    cityNameArea.textContent = "";
+
+    // do some magic to turn country code into full country name
+    let countryName = new Intl.DisplayNames(["en"], { type: "region" });
+    // display the city name paired with the country name
+    cityNameArea.textContent = cityName + ", " + countryName.of(countryCode);
 }
 
 // convert the unix timestamp into a readable date
@@ -219,8 +197,9 @@ function displayDate(timestamp) {
     // var month = ("0" + (currentDay.getMonth() + 1)).slice(-2);
     var day = ("0" + currentDay.getDate()).slice(-2);
 
+    // array for days
     var days = ["Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"];
-
+    // array for months
     var months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"]
 
     var dayName = days[currentDay.getDay()];
@@ -233,45 +212,9 @@ function displayDate(timestamp) {
     return date;
 }
 
-function changeWeatherBackground(weatherID) {
-
-    console.log("changeweather function: " + weatherID);
-
-
-    if (weatherID >= 200 && weatherID < 300) {
-        body.setAttribute("data-condition", "thunderstorm");
-        body.setAttribute("class", "");
-        body.classList.add("thunderstorm");
-    } else if (weatherID >= 300 && weatherID < 400) {
-        body.setAttribute("data-condition", "drizzle");
-        body.setAttribute("class", "");
-        body.classList.add("drizzle");
-    } else if (weatherID >= 500 && weatherID < 600) {
-        body.setAttribute("data-condition", "rain");
-        body.setAttribute("class", "");
-        body.classList.add("rain");
-    } else if (weatherID >= 600 && weatherID < 700) {
-        body.setAttribute("data-condition", "snow");
-        body.setAttribute("class", "");
-        body.classList.add("snow");
-    } else if (weatherID >= 700 && weatherID < 800) {
-        body.setAttribute("data-condition", "hazy");
-        body.setAttribute("class", "");
-        body.classList.add("atmosphere");
-    } else if (weatherID === 800) {
-        body.setAttribute("class", "");
-        body.setAttribute("data-condition", "clear");
-        body.classList.add("clear-sky");
-    }  else if (weatherID > 800) {
-        body.setAttribute("data-condition", "overcast");
-        body.setAttribute("class", "");
-        body.classList.add("overcast");
-    } 
-}
-
-
 // display the weather results
 function displayTheWeather(weatherconditions) {
+    // change the weather background using weather condition ID, which was passed in from getWeatherDetails
     changeWeatherBackground(weatherconditions.conditionID);
 
     // first clear the div
@@ -299,7 +242,7 @@ function displayTheWeather(weatherconditions) {
     // first make today's date readable
     var todaysDate = displayDate(weatherconditions.today);
     // display today's date inside left column
-    var dateTitle = document.createElement("h5");
+    var dateTitle = document.createElement("h4");
     dateTitle.append(todaysDate);
     currentForecast.appendChild(dateTitle);
 
@@ -323,7 +266,6 @@ function displayTheWeather(weatherconditions) {
     // make a list for the additional current weather details
     var cDetailsList = document.createElement("ul");
     cDetailsList.classList = "list-group list-group-flush pt-2";
-    cDetailsList.setAttribute("id", "current-details-list");
 
     // make list item for current temperature and append to ul
     var currentTemp = document.createElement("li");
@@ -447,7 +389,6 @@ function displayForecast(daily) {
         var futureIcon = document.createElement("img");
         futureIcon.setAttribute("src", futureIconUrl);
         futureIcon.setAttribute("alt", daily[i].weather[0].main);
-        futureIcon.setAttribute("id", "future-forecast-icon");
         cardBody.appendChild(futureIcon);
 
         // 'f' prefix means 'future (weather)'
@@ -455,7 +396,6 @@ function displayForecast(daily) {
         // make a list to add in the weather conditions
         var fDetailsList = document.createElement("ul");
         fDetailsList.classList = "list-group list-group-flush";
-        fDetailsList.setAttribute("id", "future-details-list");
 
         // create a list item for each of the future details array and append to the ul
         futureDetails.forEach(function(element) {
@@ -467,14 +407,89 @@ function displayForecast(daily) {
         // append ul to the card
         cardBody.appendChild(fDetailsList);
     }
-
 }
 
+// LOCAL STORAGE FUNCTIONS (save, load, clear)
+
+// save to local storage and display the previous searches
+function saveAndDisplaySearch(cityInput) {
+    // set an object to be used for storing user input data
+    var savedCity = {
+        chosenCity: cityInput
+    }
+
+    // first retrieve results from local storage
+    let savedCities = JSON.parse(localStorage.getItem("searchHistory"));
+    // if no saved cities then start with an empty search array
+    if (savedCities === null) {
+        savedCities = [];
+    }
+    // add user input into the array for all saved searches
+    savedCities.push(savedCity);
+    // save to local storage
+    localStorage.setItem("searchHistory", JSON.stringify(savedCities));
+
+    // make some buttons for each user input
+    let searchedCityButton = document.createElement("button");
+    searchedCityButton.setAttribute("class", "search-history-button");
+    searchedCityButton.textContent = savedCity.chosenCity;
+    // make sure button value is the user input
+    searchedCityButton.value = savedCity.chosenCity;
+
+    // add the button
+    previousSearchesArea.appendChild(searchedCityButton);
+
+    // when the button is clicked, use the value of the clicked button (city name) to fetch the weather data
+    searchedCityButton.addEventListener("click", function(event) {
+        // transfer the button value (ie user input) to a variable
+        let searchedCity = event.target.value;
+        // pass that variable on to fetch and print city data
+        geocodeTheCity(searchedCity);
+    })
+}
+
+// retrieving from local storage
+function loadSearchHistory() {
+    // grab the data out of local storage
+    var data = JSON.parse(localStorage.getItem("searchHistory"));
+
+    // if there's no data then end the function
+    if (!data) {
+        return;
+    }
+    // loop through the returned array and create buttons for each item in there
+    for (i = 0; i < data.length; i++) {
+        var dataButton = document.createElement("button");
+        dataButton.setAttribute("class", "search-history-buttons");
+        // text content and value will be the city the user wrote in
+        dataButton.textContent = data[i].chosenCity;
+        dataButton.value = data[i].chosenCity;
+        // add button to search history
+        previousSearchesArea.appendChild(dataButton);
+        // add event listener to button (works the same as the button in function 'saveAndDisplaySearch')
+        dataButton.addEventListener("click", function(event) {
+            let searchedCity = event.target.value;
+            geocodeTheCity(searchedCity);
+        })
+    }
+}
+
+// clear the search history
+function clearSearchHistory() {
+    localStorage.clear();
+    previousSearchesArea.textContent = "";
+}
+
+// INITIALISE PAGE FUNCTION
+
+// initialise the page by loading in search history
 function init() {
     loadSearchHistory();
 }
 
+// add event listeners for buttons
 submitButton.addEventListener("click", submitUserInput);
 clearButton.addEventListener("click", clearSearchHistory);
 
+// start weather dashboard!
 init();
