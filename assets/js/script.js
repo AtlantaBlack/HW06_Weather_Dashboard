@@ -4,6 +4,9 @@ var weatherAPIkey = "70ae3d7cda7e676a90d911c1ff2798ed";
 var cityDisplayArea = document.querySelector("#city-name-display");
 var previousSearchesArea = document.querySelector("#previous-searches");
 
+// var mainParentFlex = document.querySelector(".main-parent-flex");
+// var mainChildFlex = document.querySelector(".main-child-flex");
+
 var todaysDateArea = document.querySelector("#todays-date-display");
 var weatherDisplayArea = document.querySelector("#weather-display");
 var forecastDisplayArea = document.querySelector("#forecast-display");
@@ -179,10 +182,12 @@ function getWeatherDetails(lat, lon) {
                 "today": data.current.dt,
                 "daily": data.daily
             }
+
             // pass object containing weather details on
             displayTheWeather(weatherConditions);
             // pass only the daily forecast info on
             displayForecast(weatherConditions.daily);
+
         })
         .catch(function (error) {
             console.log(error);
@@ -248,7 +253,7 @@ function displayTheWeather(weatherconditions) {
 
     // make box to hold current day's weather forecast; set the elements to be displayed in a flex column
     var currentForecast = document.createElement("div");
-    currentForecast.classList = "d-flex flex-column align-items-center pt-2";
+    currentForecast.classList = "d-flex flex-column align-items-center text-center pt-2";
     columnLeft.appendChild(currentForecast);
 
     // first make today's date readable
@@ -349,7 +354,7 @@ function displayForecast(daily) {
 
     // make row 
     var fdRow = document.createElement("div");
-    fdRow.classList = "row row-cols-1 row-cols-md-3 row-cols-lg-5 g-2";
+    fdRow.classList = "row row-cols-1 row-cols-md-3 row-cols-lg-5 g-4 g-md-2";
     forecastDisplayArea.appendChild(fdRow);
 
     // creating display for forecast for next five days
@@ -367,7 +372,7 @@ function displayForecast(daily) {
         fdContainer.appendChild(forecastCard);
 
         // make a card body div to add in the content
-        var cardBody = document.createElement("div");
+        var cardBody = document.createElement("article");
         // add flex to card body to align items vertically and in the centre
         cardBody.classList = "card-body d-flex flex-column align-items-center";
         forecastCard.appendChild(cardBody);

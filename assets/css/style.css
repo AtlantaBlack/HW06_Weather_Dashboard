@@ -59,18 +59,11 @@ h6 {
     font-size: 1.15rem;
 }
 
-header h1 {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    min-height: 10rem;
-    background: linear-gradient(var(--solid-blue), var(--sky));
-    color: var(--off-white);
-    text-transform: uppercase;
-    border-bottom: 2px solid var(--solid-blue);
+header {
+    visibility: hidden;
 }
 
-main {
+.main-child-flex {
     background-color: rgba(255, 255, 255, 0.7);
 }
 
@@ -96,8 +89,8 @@ img {
 }
 
 .custom-row {
-    padding: 5px;
-    margin: 5rem 0;
+    padding: 1rem;
+    margin: 2.2rem 0 5rem;
 }
 
 .custom-btn:hover {
@@ -178,4 +171,17 @@ img {
 
 .border-blue {
     border: 1px solid blue;
+}
+
+@media screen and (min-width: 768px) {
+    .main-parent-flex {
+        width: 100%;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+    }
+
+    .main-child-flex {
+        flex: 1 0 100%;
+    }
 }

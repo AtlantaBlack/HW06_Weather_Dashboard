@@ -25,10 +25,10 @@
     </header>
 
     <main>
-        <div class="container-fluid main-child">
-            <div class="row custom-row">
-                <div class="col-12 col-md-3 mb-3 content-left">
+        <div class="container-fluid g-0 main-parent-flex">
+            <div class="row custom-row main-child-flex">
 
+                <div class="col-12 col-md-3 mb-3 content-left">
                     <form id="search-input-container" class="shadow">
                         <div class="mb-3">
                             <label for="city-name" class="form-label">
@@ -45,33 +45,33 @@
                         </button>
                     </form>
 
-                    <div id="previous-searches-container" class="shadow">
+                    <section id="previous-searches-container" class="shadow">
                         <h6>Search History</h6>
                         <button id="clear-history-button" class="btn btn-secondary custom-btn">Clear History</button>
 
                         <div id="previous-searches" class="container-fluid g-0 flex-column-reverse">
                         <!-- previous searches  -->
                         </div>
-                    </div> 
+                    </section> 
                 </div>
 
                 <div class="col-12 col-md-9 content-right">
-                    <div id="weather-display-container" class="shadow">
+                    <section id="weather-display-container" class="shadow">
                         <h3>Today's weather forecast in <span id="city-name-display">...</span>
                         </h3>
 
                         <div id="weather-display">
                         <!-- current weather display  -->
                         </div>
-                    </div>
+                    </section>
 
-                    <div id="forecast-display-container" class="shadow">
+                    <section id="forecast-display-container" class="shadow">
                         <h4>5 Day Forecast</h4>
 
                         <div id="forecast-display">
                         <!-- forecast display -->
                         </div>
-                    </div>
+                    </section>
                 </div>
 
             </div>
