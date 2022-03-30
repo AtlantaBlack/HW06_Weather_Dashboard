@@ -1,8 +1,4 @@
 # BCS HW 06 - Weather Dashboard
-Application that shows current weather and future forecast for specified city
-
-
-# BCS HW 04 - Weather Dashboard
 
 ## Description
 
