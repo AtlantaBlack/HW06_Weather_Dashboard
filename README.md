@@ -44,6 +44,8 @@ This project was a great way to put all the learnings of HTML, CSS, Javascript a
 
 [Coolors - colour palette generator](https://coolors.co/?home)
 
+[Unsplash - HD sky wallpapers](https://unsplash.com/wallpapers/nature/sky)
+
 AskBCS Learning Assistant
 
 Class notes
