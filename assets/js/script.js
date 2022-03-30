@@ -1,6 +1,8 @@
 // authentication key for Open Weather API
 var weatherAPIkey = "70ae3d7cda7e676a90d911c1ff2798ed";
 
+var body = document.querySelector("body");
+
 var cityDisplayArea = document.querySelector("#city-name-display");
 var previousSearchesArea = document.querySelector("#previous-searches");
 
@@ -231,9 +233,47 @@ function displayDate(timestamp) {
     return date;
 }
 
+function changeWeatherBackground(weatherID) {
+
+    console.log("changeweather function: " + weatherID);
+
+
+    if (weatherID >= 200 && weatherID < 300) {
+        body.setAttribute("data-condition", "thunderstorm");
+        body.setAttribute("class", "");
+        body.classList.add("thunderstorm");
+    } else if (weatherID >= 300 && weatherID < 400) {
+        body.setAttribute("data-condition", "drizzle");
+        body.setAttribute("class", "");
+        body.classList.add("drizzle");
+    } else if (weatherID >= 500 && weatherID < 600) {
+        body.setAttribute("data-condition", "rain");
+        body.setAttribute("class", "");
+        body.classList.add("rain");
+    } else if (weatherID >= 600 && weatherID < 700) {
+        body.setAttribute("data-condition", "snow");
+        body.setAttribute("class", "");
+        body.classList.add("snow");
+    } else if (weatherID >= 700 && weatherID < 800) {
+        body.setAttribute("data-condition", "hazy");
+        body.setAttribute("class", "");
+        body.classList.add("atmosphere");
+    } else if (weatherID === 800) {
+        body.setAttribute("class", "");
+        body.setAttribute("data-condition", "clear");
+        body.classList.add("clear-sky");
+    }  else if (weatherID > 800) {
+        body.setAttribute("data-condition", "overcast");
+        body.setAttribute("class", "");
+        body.classList.add("overcast");
+    } 
+}
+
 
 // display the weather results
 function displayTheWeather(weatherconditions) {
+    changeWeatherBackground(weatherconditions.conditionID);
+
     // first clear the div
     weatherDisplayArea.textContent = "";
 
