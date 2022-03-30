@@ -52,4 +52,4 @@ Class notes
 
 © 2022 Sushan Yue
 
-[MIT License](/LICENSE.txt)
+[MIT License](/LICENSE)
