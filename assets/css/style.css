@@ -6,7 +6,7 @@
     --off-white: rgb(245, 245, 245);
 
     --solid-blue: rgb(0, 119, 182);
-    --grey-blue: rgb(79, 93, 117);
+    --grey-blue: rgb(67, 80, 102);
     --deep-blue: rgb(25, 51, 88);
 
     --earthy: rgb(170, 158, 147);
@@ -28,15 +28,15 @@ body {
     background-size: cover;
     color: var(--deep-blue);
     font-family: 'League Spartan', sans-serif;
+    font-weight: 300;
 }
 
 h1, h2, h3, h4, h5, h6 {
-    font-weight: bold;
+    font-weight: 900;
 }
 
 h1 {
     font-size: 2.8em;
-    letter-spacing: 0.1rem;
 }
 
 h2 {
@@ -64,7 +64,7 @@ header {
 }
 
 .main-child-flex {
-    background-color: rgba(255, 255, 255, 0.7);
+    background-color: rgba(255, 255, 255, 0.65);
 }
 
 
@@ -96,6 +96,7 @@ img {
 .custom-btn:hover {
     background-color: var(--grey-blue);
     border: 1px solid var(--grey-blue);
+    outline: 2px solid lightsalmon;
 }
 
 .custom-form-btn {
@@ -159,7 +160,7 @@ img {
 }
 
 #forecast-display-container {
-    background-color: var(--sky);
+    background-color: rgba(182, 203, 222, 0.7);
     border-radius: 0 0 0.5rem 0.5rem;
     min-height: 12.5rem;
     padding: 1rem;
