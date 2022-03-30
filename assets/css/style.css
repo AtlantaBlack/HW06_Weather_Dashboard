@@ -57,7 +57,7 @@ body {
 
 /* holds bg image for rain */
 .rain {
-    background: var(--grey-blue) url("../images/rain-alex-dukhanov.jpg") no-repeat fixed center;
+    background: var(--grey-blue) url("../images/rain-kevin-wong.jpg") no-repeat fixed center;
     background-size: cover;
 }
 
