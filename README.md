@@ -28,9 +28,9 @@ This application was built using:
 
 ## Usage
 
-[Link to deployed application via GitHub Pages](https://atlantablack.github.io/HW06_Weather_Dashboard/)
+[Link to deployed application via GitHub Pages](https://atlantablack.github.io/Weather_Dashboard/)
 
-[Link to GitHub repository](https://github.com/AtlantaBlack/HW06_Weather_Dashboard)
+[Link to GitHub repository](https://github.com/AtlantaBlack/Weather_Dashboard)
 
 ---
 
